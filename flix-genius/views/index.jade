@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+
+  h2 Creating a new flick
+    form(action="/flicks/create", method="post")
+      input(type="text", name="username")
+      input(type="submit")
