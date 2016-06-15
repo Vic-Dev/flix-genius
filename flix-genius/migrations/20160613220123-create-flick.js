@@ -36,7 +36,15 @@ module.exports = {
       },
       netflix_genre: {
         allowNull: true,
-        type: Sequelize.STRING
+        type: Sequelize.ARRAY(Sequelize.STRING)
+      },
+      netflix_rating: {
+        allowNull: true,
+        type: Sequelize.DECIMAL(3, 1)
+      },
+      imdb_rating: {
+        allowNull: true,
+        type: Sequelize.DECIMAL(3, 1)
       },
       description: {
         type: Sequelize.TEXT,

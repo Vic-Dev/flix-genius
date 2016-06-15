@@ -35,15 +35,15 @@ module.exports = function(sequelize, DataTypes) {
     },
     netflix_genre: {
       allowNull: true,
-      type: DataTypes.STRING
+      type: DataTypes.ARRAY(DataTypes.STRING)
     },
     netflix_rating: {
       allowNull: true,
-      type: DataTypes.DECIMAL(3, 2)
+      type: DataTypes.DECIMAL(3, 1)
     },
     imdb_rating: {
       allowNull: true,
-      type: DataTypes.DECIMAL(3, 2)
+      type: DataTypes.DECIMAL(3, 1)
     },
     description: {
       type: DataTypes.TEXT,
