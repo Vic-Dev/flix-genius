@@ -1,7 +1,5 @@
-
-
+var models = require('./models');
 var request = require('request');
-var cheerio = require('cheerio');
 var start_val = 0;
 
 var cookie;
@@ -22,8 +20,6 @@ var getCookie = function() {request(options_cookie, function (error, response, b
     }
   })
 }
-
-getCookie();
 
 var getData = function(start, cookie) {
     var options_data = {
@@ -77,9 +73,9 @@ var getData = function(start, cookie) {
             console.log(created);
           })
         }
-        // setTimeout(function(){ 
-        //   getData(start + 100, cookie); 
-        // }, 2000);
+        setTimeout(function(){ 
+          getData(start + 100, cookie); 
+        }, 2000);
       }
     }
   })
@@ -131,3 +127,5 @@ var parseDirector = function(data) {
   }
   return director;
 }
+
+module.exports.getCookie = getCookie;

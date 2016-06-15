@@ -2,6 +2,7 @@ var models  = require('../models');
 var express = require('express');
 var router = express.Router();
 var http = require('http');
+var scraper = require('../allflicks-scraper.js');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -108,7 +109,7 @@ module.exports = router;
 //   })
 // }
 
-// getCookie();
+scraper.getCookie();
 
 // var getData = function(start, cookie) {
 //     var options_data = {
