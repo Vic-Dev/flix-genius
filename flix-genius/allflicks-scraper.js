@@ -1,18 +1,17 @@
 var models = require('./models');
 var request = require('request');
-var start_val = 0;
 
 var cookie;
 var limit;
 
-var options_cookie = {
+var optionsCookie = {
   url: 'https://www.allflicks.net/canada',
   headers: {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.84 Safari/537.36'
   }  
 }
 
-var getCookie = function() {request(options_cookie, function (error, response, body) {
+var getCookie = function() {request(optionsCookie, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       cookie = response.headers['set-cookie'].join(';');
       console.log(cookie);
@@ -36,33 +35,33 @@ var getData = function(start, cookie) {
         // add to database
         console.log(body.data[0]);
         console.log(start);
-        var all_data = body.data;
-        for (var i = 0; i < all_data.length; i++) {
-          var current_entry = all_data[i];
+        var allData = body.data;
+        for (var i = 0; i < allData.length; i++) {
+          var currentEntry = allData[i];
          
           // Regex box_art
-          var current_art = parseBoxArt(current_entry);
+          var currentArt = parseBoxArt(currentEntry);
 
           // Regex genres
-          var current_genres = parseGenres(current_entry);
+          var currentGenres = parseGenres(currentEntry);
 
           // Split cast into array
-          var current_cast = parseCast(current_entry);
+          var currentCast = parseCast(currentEntry);
 
           // Rating logic
-          var current_rating = parseRating(current_entry);
+          var currentRating = parseRating(currentEntry);
 
           // Director logic
-          var current_director = parseDirector(current_entry);
-          models.flick.findOrCreate({where: { netflix_id: current_entry.id }, defaults: {
-              title: current_entry.title,
-              year: current_entry.year,
-              availability: current_entry.available,
-              netflix_genre: current_genres,
-              imdb_rating: current_rating,
-              box_art: current_art,
-              cast: current_cast,
-              director: current_director,
+          var currentDirector = parseDirector(currentEntry);
+          models.flick.findOrCreate({where: { netflix_id: currentEntry.id }, defaults: {
+              title: currentEntry.title,
+              year: currentEntry.year,
+              availability: currentEntry.available,
+              netflix_genre: currentGenres,
+              imdb_rating: currentRating,
+              box_art: currentArt,
+              cast: currentCast,
+              director: currentDirector,
               active: true
             } 
           })
@@ -81,27 +80,23 @@ var getData = function(start, cookie) {
   })
 }
 
-// models.flick.findOne({where: {netflix_id: 80097490} }).then(function(thing) {
-//   console.log(thing);
-// });
-
 var parseBoxArt = function(data) {
   var img = data.box_art;
-  var img_regex = '^<img src="(.*)" width.*$';
-  return img.match(img_regex)[1];
+  var imgRegex = '^<img src="(.*)" width.*$';
+  return img.match(imgRegex)[1];
 }
 
 var parseGenres = function(data) {
-  var genre_array = [ data.genre, data.genre2, data.genre3 ];
-  var genre_array_parsed = [];
-  var genre_regex = '^<a.*">(.+)<\/a>$';
-  for (var j = 0; j < genre_array.length; j++) {
-    var regex_match = genre_array[j].match(genre_regex)
-    if (regex_match != null) {
-      genre_array_parsed.push(regex_match[1]);
+  var genreArray = [ data.genre, data.genre2, data.genre3 ];
+  var genreArrayParsed = [];
+  var genreRegex = '^<a.*">(.+)<\/a>$';
+  for (var j = 0; j < genreArray.length; j++) {
+    var regexMatch = genreArray[j].match(genreRegex)
+    if (regexMatch != null) {
+      genreArrayParsed.push(regexMatch[1]);
     }
   }
-  return genre_array_parsed;
+  return genreArrayParsed;
 }
 
 var parseCast = function(data) {

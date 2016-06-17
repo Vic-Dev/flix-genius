@@ -4,37 +4,43 @@ var cheerio = require('cheerio');
 
 var offset = 0;
 
+var updateDescription = function(flick, description) {
+  flick.update({
+    description: givenDescription
+  }).then(function() { console.log(flick.description); })
+}
+
 // Using Netflix
-var getDescription = function(flick_instance) {
+var getDescription = function(flickInstance) {
   var options = {
-    url: 'https://www.netflix.com/title/' + flick_instance.netflix_id 
+    url: 'https://www.netflix.com/title/' + flickInstance.netflix_id 
   }
   request(options, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       var $ = cheerio.load(body);
       var description = $('.synopsis span:nth-child(2)').text()
       if (description != '') {
-        flick_instance.update({
+        flickInstance.update({
           description: description
-        }).then(function(){ console.log(flick_instance.description); })
+        }).then(function(){ console.log(flickInstance.description); })
       }
     }
   })
 }
 
 // Using AllFlicks
-var getDescriptionAllFlicks = function(flick_instance) {
+var getDescriptionAllFlicks = function(flickInstance) {
   var options = {
-    url: 'https://www.allflicks.net/movies-canada/' + flick_instance.netflix_id
+    url: 'https://www.allflicks.net/movies-canada/' + flickInstance.netflix_id
   }
   request(options, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       var $ = cheerio.load(body);
       var description = $('.borderless').contents()[3].data; 
       if (description != '') {
-        flick_instance.update({
+        flickInstance.update({
           description: description
-        }).then(function(){ console.log(flick_instance.description); })
+        }).then(function(){ console.log(flickInstance.description); })
       }
     }
   })
@@ -45,15 +51,14 @@ var getDescriptionAllFlicks = function(flick_instance) {
 var getAllFlicks = function(callback) {
   models.flick.findAll({ 
     where: { 
-      // $or: [{description: null}, {description: ''}]
-      id: 1
+      $or: [{description: null}, {description: ''}]
     },
     order: [['id', 'ASC']] 
   }).then(function(flicks) {
-    flicks.forEach(function(flick_instance) {
+    flicks.forEach(function(flickInstance) {
       setTimeout( function() {
-        console.log(flick_instance.id);
-        callback(flick_instance);
+        console.log(flickInstance.id);
+        callback(flickInstance);
       }, 1000 + offset);
       offset += 1000;
     })
