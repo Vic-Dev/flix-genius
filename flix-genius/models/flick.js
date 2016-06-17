@@ -17,7 +17,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     imdb_id: {
       allowNull: true,
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       unique: true
     },
     title: {
