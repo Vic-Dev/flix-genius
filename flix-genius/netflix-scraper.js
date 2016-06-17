@@ -4,14 +4,14 @@ var cheerio = require('cheerio');
 
 var offset = 0;
 
-var updateDescription = function(flick, description) {
+var updateDescription = function(flick, givenDescription) {
   flick.update({
     description: givenDescription
   }).then(function() { console.log(flick.description); })
 }
 
 // Using Netflix
-var getDescription = function(flickInstance) {
+var getDescriptionNetflix = function(flickInstance) {
   var options = {
     url: 'https://www.netflix.com/title/' + flickInstance.netflix_id 
   }
@@ -20,9 +20,7 @@ var getDescription = function(flickInstance) {
       var $ = cheerio.load(body);
       var description = $('.synopsis span:nth-child(2)').text()
       if (description != '') {
-        flickInstance.update({
-          description: description
-        }).then(function(){ console.log(flickInstance.description); })
+        updateDescription(flickInstance, description);
       }
     }
   })
@@ -38,9 +36,7 @@ var getDescriptionAllFlicks = function(flickInstance) {
       var $ = cheerio.load(body);
       var description = $('.borderless').contents()[3].data; 
       if (description != '') {
-        flickInstance.update({
-          description: description
-        }).then(function(){ console.log(flickInstance.description); })
+        updateDescription(flickInstance, description);
       }
     }
   })
@@ -82,7 +78,7 @@ var removeBackslashDesc = function() {
 }
 
 
-getAllFlicks(getDescription);
+// getAllFlicks(getDescriptionNetflix);
 
 
 module.exports.getAllFlicks = getAllFlicks;
