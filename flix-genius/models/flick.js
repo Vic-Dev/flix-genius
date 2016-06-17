@@ -81,6 +81,14 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: true
+    },
+    imdb_link: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    netflix_link: {
+      type: DataTypes.STRING,
+      allowNull: true
     }
   }, {
     classMethods: {
