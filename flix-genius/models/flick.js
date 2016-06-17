@@ -38,11 +38,11 @@ module.exports = function(sequelize, DataTypes) {
         notEmpty: true
       }
     },
-    netflix_genre: {
+    netflix_genres: {
       allowNull: true,
       type: DataTypes.ARRAY(DataTypes.STRING)
     },
-    imdb_genre: {
+    imdb_genres: {
       allowNull: true,
       type: DataTypes.ARRAY(DataTypes.STRING)      
     },
@@ -94,19 +94,19 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: true
     },
-    imdb_director: {
-      type: DataTypes.STRING,
+    imdb_directors: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true    
     },
-    imdb_writer: {
-      type: DataTypes.STRING,
+    imdb_writers: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true
     },
     imdb_language: {
       type: DataTypes.STRING,
       allowNull: true   
     },
-    imdb_country: {
+    imdb_countries: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: true
     },

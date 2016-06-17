@@ -57,11 +57,11 @@ var getData = function(start, cookie) {
               title: currentEntry.title,
               year: currentEntry.year,
               availability: currentEntry.available,
-              netflix_genre: currentGenres,
+              netflix_genres: currentGenres,
               imdb_rating: currentRating,
               box_art: currentArt,
-              cast: currentCast,
-              director: currentDirector,
+              netflix_cast: currentCast,
+              netflix_director: currentDirector,
               active: true
             } 
           })

@@ -7,7 +7,7 @@ var offset = 0;
 var updateDescription = function(flick, givenDescription) {
   flick.update({
     description: givenDescription
-  }).then(function() { console.log(flick.description); })
+  }).then(function() { console.log(flick.netflix_description); })
 }
 
 // Using Netflix
@@ -47,7 +47,7 @@ var getDescriptionAllFlicks = function(flickInstance) {
 var getAllFlicks = function(callback) {
   models.flick.findAll({ 
     where: { 
-      $or: [{description: null}, {description: ''}]
+      $or: [{netflix_description: null}, {netflix_description: ''}]
     },
     order: [['id', 'ASC']] 
   }).then(function(flicks) {
@@ -65,15 +65,15 @@ var getAllFlicks = function(callback) {
 var removeBackslashDesc = function() {
   models.flick.findAll({
     where: {
-      description: { $like: '%\\\\%' }
+      netflix_description: { $like: '%\\\\%' }
     },
     order: [['id', 'ASC']]
   }).then(function(flicks) {
     flicks.forEach(function(flick) {
-      console.log(flick.description);
+      console.log(flick.netflix_description);
       flick.update({
-        description: null
-      }).then(function(){ console.log(flick.description); })
+        netflix_description: null
+      }).then(function(){ console.log(flick.netflix_description); })
     })
   })
 }
