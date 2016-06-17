@@ -15,6 +15,11 @@ module.exports = function(sequelize, DataTypes) {
         notEmpty: true
       }
     },
+    imdb_id: {
+      allowNull: true,
+      type: DataTypes.INTEGER,
+      unique: true
+    },
     title: {
       type: DataTypes.STRING,
       validate: {
@@ -37,6 +42,10 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true,
       type: DataTypes.ARRAY(DataTypes.STRING)
     },
+    imdb_genre: {
+      allowNull: true,
+      type: DataTypes.ARRAY(DataTypes.STRING)      
+    },
     netflix_rating: {
       allowNull: true,
       type: DataTypes.DECIMAL(3, 1)
@@ -45,15 +54,19 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true,
       type: DataTypes.DECIMAL(3, 1)
     },
-    description: {
+    netflix_description: {
       type: DataTypes.TEXT,
-      allowNull: true,
+      allowNull: true
     },
-    age_restriction: {
+    imdb_description: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    imdb_age_restriction: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: true
     },
-    runtime: {
+    imdb_runtime: {
       type: DataTypes.INTEGER,
       validate: {
         notEmpty: true
@@ -61,7 +74,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     trailer_link: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: true
     },
     box_art: {
       type: DataTypes.STRING,
@@ -69,26 +82,42 @@ module.exports = function(sequelize, DataTypes) {
         notEmpty: true
       }
     },
-    cast: {
+    netflix_cast: {
       type: DataTypes.ARRAY(DataTypes.STRING),
-      allowNull: true,
+      allowNull: true
     },
-    director: {
+    imdb_cast: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      allowNull: true     
+    },
+    netflix_director: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: true
+    },
+    imdb_director: {
+      type: DataTypes.STRING,
+      allowNull: true    
+    },
+    imdb_writer: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    imdb_language: {
+      type: DataTypes.STRING,
+      allowNull: true   
+    },
+    imdb_country: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      allowNull: true
+    },
+    imdb_votes: {
+      type: DataTypes.INTEGER,
+      allowNull: true
     },
     active: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: true
-    },
-    imdb_link: {
-      type: DataTypes.STRING,
-      allowNull: true
-    },
-    netflix_link: {
-      type: DataTypes.STRING,
-      allowNull: true
     }
   }, {
     classMethods: {

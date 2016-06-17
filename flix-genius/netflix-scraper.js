@@ -51,6 +51,7 @@ var getAllFlicks = function(callback) {
     },
     order: [['id', 'ASC']] 
   }).then(function(flicks) {
+    console.log(flicks);
     flicks.forEach(function(flickInstance) {
       setTimeout( function() {
         console.log(flickInstance.id);
