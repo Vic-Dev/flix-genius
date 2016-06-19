@@ -7,7 +7,7 @@ var offset = 0;
 // TODO: Remove from db runtimes of 'N/A'
 
 var parseRuntime = function(data) {
-  var runtime = data.Runtime;
+  var runtime = data;
   var runtimeRegex = '(.+) min$';
   runtime = runtime.match(runtimeRegex);
   if (runtime) {
@@ -38,7 +38,7 @@ var parseString = function(data) {
 
 var parseVotes = function(votes) {
   if (votes) {
-    return votes.replace(',','');
+    return votes.replace(/,/g,'');
   }
   return votes
 }
@@ -90,7 +90,7 @@ var updateFlick = function(flick, body) {
     imdb_rating: current_rating,
     imdb_votes: current_votes,
     imdb_id: current_id
-  }).then(function() { console.log(flick.imdb_rating); })
+  }).then(function() { console.log('\u0007' + flick.imdb_rating); })
 }
 
 var getAllFlicks = function(callback) {
@@ -102,8 +102,8 @@ var getAllFlicks = function(callback) {
       setTimeout( function() {
         console.log(flickInstance.id);
         callback(flickInstance);
-      }, 1000 + offset);
-      offset += 1000;
+      }, 250 + offset);
+      offset += 250;
     })
   })
 }

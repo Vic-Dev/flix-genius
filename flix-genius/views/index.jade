@@ -4,7 +4,9 @@ block content
   h1= title
   p Welcome to #{title}
 
-  h2 Creating a new flick
-    form(action="/flicks/create", method="post")
-      input(type="text", name="username")
-      input(type="submit")
+  h2 Flicks
+
+  ul
+  each flick in flicks
+    li
+      = flick.title
