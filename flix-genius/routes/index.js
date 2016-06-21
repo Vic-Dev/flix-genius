@@ -12,11 +12,13 @@ var flick_controller = require('../controllers/flick.controller.js');
 
 router.get('/', flick_controller.index);
 
-router.get('/:id', flick_controller.show);
+router.get('/flicks/:id', flick_controller.show);
+
+router.get('/flicks', flick_controller.paginate);
 
 router.get('/about', function(req,res,next) {
-  var test = testing();
-  res.send(test);
+  // var test = testing();
+  res.send('hi');
 });
 
 module.exports = router;

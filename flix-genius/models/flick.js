@@ -7,6 +7,10 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true,
       type: DataTypes.INTEGER
     },
+    sentiment: {
+      allowNull: true,
+      type: DataTypes.DECIMAL(6, 5)
+    },
     netflix_id: {
       allowNull: false,
       type: DataTypes.INTEGER,

@@ -12,12 +12,26 @@ exports.index = function(req, res) {
 
 // // Gets a single Thing from the DB
 exports.show = function(req, res) {
-  var flickId = req.params.id
+  var flickId = req.params.id;
   models.flick.find({
     where: {
       netflix_id: flickId
     }
   })
+  .then(function(flickInstance) {
+    res.json(flickInstance);
+  });
+};
+
+exports.paginate = function(req, res) {
+  var start = req.param('start');
+  var limit = req.param('limit');
+  var sort = req.param('sort');
+  var order = req.param('order');
+  console.log('start: ' + start + ' limit: ' + limit);
+  models.flick.findAll({ where: {
+    active: true
+  }, offset: start, limit: limit, order: sort + ' ' + order + ' NULLS LAST'})
   .then(function(flickInstance) {
     res.json(flickInstance);
   });
