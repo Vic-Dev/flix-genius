@@ -3,16 +3,27 @@ var request = require('request');
 var cheerio = require('cheerio');
 
 var offset = 0;
+var key;
 
 var updateFlick = function(flick, body) {
+  var $ = cheerio.load(body);
+  var anger = $('anger').text();
+  var disgust = $('disgust').text();
+  var fear = $('fear').text();
+  var joy = $('joy').text();
+  var sadness = $('sadness').text();
   flick.update({
-    sentiment: body
-  }).then(function() { console.log('\u0007' + flick.sentiment); })
+    anger: anger,
+    disgust: disgust,
+    fear: fear,
+    joy: joy,
+    sadness: sadness
+  }).then(function() { console.log('\u0007' + flick.joy); })
 }
 
 var getAllFlicks = function(callback) {
   models.flick.findAll({ 
-    where: { sentiment: null },
+    where: { anger: null },
     order: [['id', 'ASC']] 
   }).then(function(flicks) {
     // console.log(flicks);
@@ -20,19 +31,18 @@ var getAllFlicks = function(callback) {
       setTimeout( function() {
         console.log(flickInstance.id);
         callback(flickInstance);
-      }, 1500 + offset);
-      offset += 1500;
+      }, 2000 + offset);
+      offset += 2000;
     })
   })
 }
 
-var getWatsonInfo = function(flick) {
+var getWatsonSentiment = function(flick) {
   var options = {
     url: 'http://gateway-a.watsonplatform.net/calls/text/TextGetTextSentiment?apikey=' + key + '&text=' + flick.netflix_description
   }
   request(options, function (error, response, body) {
     if (!error && response.statusCode == 200) {
-      debugger;
       var $ = cheerio.load(body);
       var sentiment = $('score').text();
       // console.log(body.Response);
@@ -43,4 +53,21 @@ var getWatsonInfo = function(flick) {
   })
 }
 
-getAllFlicks(getWatsonInfo);
+var getWatsonEmotion = function(flick) {
+  var options = {
+    url: 'http://gateway-a.watsonplatform.net/calls/text/TextGetEmotion?apikey=' + key + '&text=' + flick.netflix_description
+  }
+  request(options, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      // var sentiment = $('score').text();
+      console.log(body);
+      if (body.Response != 'False') {
+        updateFlick(flick, body);
+      }
+    }
+  })
+}
+
+// getAllFlicks(getWatsonInfo);
+
+getAllFlicks(getWatsonEmotion);

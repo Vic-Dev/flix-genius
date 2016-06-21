@@ -9,7 +9,27 @@ module.exports = function(sequelize, DataTypes) {
     },
     sentiment: {
       allowNull: true,
-      type: DataTypes.DECIMAL(6, 5)
+      type: DataTypes.DECIMAL(7, 6)
+    },
+    anger: {
+      allowNull: true,
+      type: DataTypes.DECIMAL(7, 6)
+    },
+    fear: {
+      allowNull: true,
+      type: DataTypes.DECIMAL(7, 6)
+    },
+    disgust: {
+      allowNull: true,
+      type: DataTypes.DECIMAL(7, 6)
+    },
+    joy: {
+      allowNull: true,
+      type: DataTypes.DECIMAL(7, 6)
+    },
+    sadness: {
+      allowNull: true,
+      type: DataTypes.DECIMAL(7, 6)
     },
     netflix_id: {
       allowNull: false,
