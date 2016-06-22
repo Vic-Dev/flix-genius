@@ -32,16 +32,24 @@ exports.paginate = function(req, res) {
   var genre = req.query.genre;
   var netflix_genres;
   var genreQuery = '';
-  console.log(genre.length > 0);
+  console.log('movie: ' + moviesOrTv);
+  console.log('genre: ' + genre);
   console.log('sort: ' + sort);
   console.log('order: ' + order);
   console.log('start: ' + start + ' limit: ' + limit);
-  if (moviesOrTv === 'tv') {
+  if (moviesOrTv == undefined || moviesOrTv == 'undefined') {
+    moviesOrTv = '';
+  }
+  if (genre == undefined || genre == 'undefined') {
+    genre = '';
+  }
+  console.log(genre);
+  if (moviesOrTv === 'TV Shows') {
     if (genre.length > 0) {
       genreQuery = " AND netflix_genres @> ARRAY['" + genre + "']::varchar[]";
     }
     netflix_genres = " AND netflix_genres @> ARRAY['TV Shows']::varchar[]" + genreQuery;
-  } else if (moviesOrTv === 'movies') {
+  } else if (moviesOrTv === 'Movies') {
     if (genre.length > 0) {
       genreQuery = " AND netflix_genres @> ARRAY['" + genre + "']::varchar[]";
     }
