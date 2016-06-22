@@ -24,14 +24,33 @@ exports.show = function(req, res) {
 };
 
 exports.paginate = function(req, res) {
-  var start = req.param('start');
-  var limit = req.param('limit');
-  var sort = req.param('sort');
-  var order = req.param('order');
+  var start = req.query.start;
+  var limit = req.query.limit;
+  var sort = req.query.sort;
+  var order = req.query.order;
+  var moviesOrTv = req.query.moviesOrTv;
+  var genre = req.query.genre;
+  var netflix_genres;
+  var genreQuery = '';
+  console.log(genre.length > 0);
+  console.log('sort: ' + sort);
+  console.log('order: ' + order);
   console.log('start: ' + start + ' limit: ' + limit);
-  models.flick.findAll({ where: {
-    active: true
-  }, offset: start, limit: limit, order: sort + ' ' + order + ' NULLS LAST'})
+  if (moviesOrTv === 'tv') {
+    if (genre.length > 0) {
+      genreQuery = " AND netflix_genres @> ARRAY['" + genre + "']::varchar[]";
+    }
+    netflix_genres = " AND netflix_genres @> ARRAY['TV Shows']::varchar[]" + genreQuery;
+  } else if (moviesOrTv === 'movies') {
+    if (genre.length > 0) {
+      genreQuery = " AND netflix_genres @> ARRAY['" + genre + "']::varchar[]";
+    }
+    netflix_genres = " AND NOT netflix_genres @> ARRAY['TV Shows']::varchar[]" + genreQuery;
+  } else {
+    netflix_genres = '';
+  }
+  var where = ["active = ?" + netflix_genres, true]
+  models.flick.findAll({ where: where, offset: start, limit: limit, order: sort + ' ' + order + ' NULLS LAST'})
   .then(function(flickInstance) {
     res.json(flickInstance);
   });
