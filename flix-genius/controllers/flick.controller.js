@@ -23,6 +23,8 @@ exports.show = function(req, res) {
   });
 };
 
+// TODO: EITHER change query to fit database search OR update database cols
+
 exports.paginate = function(req, res) {
   var start = req.query.start;
   var limit = req.query.limit;
