@@ -34,6 +34,28 @@ exports.paginate = function(req, res) {
   var genre = req.query.genre;
   var netflix_genres;
   var genreQuery = '';
+  var genreAliases = {
+    'Action and Adventure': 'Action & Adventure', 
+    'Anime': 'Anime', 
+    'Canadian': 'Canadian Movies', 
+    'Children and Family': 'Children & Family', 
+    'Classic': 'Classic Movies', 
+    'Comedies': 'Comedies', 
+    'Documentaries': 'Documentaries', 
+    'Dramas': 'Dramas', 
+    'Faith and Spirituality': 'Faith & Spirituality', 
+    'Gay and Lesbian': 'Gay & Lesbian', 
+    'Horror': 'Horror Movies', 
+    'Independent': 'Independent Movies', 
+    'International': 'International Movies', 
+    'Romantic': 'Romantic Movies', 
+    'Sci-Fi and Fantasy': 'Sci-Fi & Fantasy', 
+    'Sports': 'Sports Movies', 
+    'Sports and Fitness': 'Sports & Fitness', 
+    'Thrillers': 'Thrillers', 
+    'Music': 'Music', 
+    'Musicals': 'Musicals'
+  }
   console.log('movie: ' + moviesOrTv);
   console.log('genre: ' + genre);
   console.log('sort: ' + sort);
@@ -48,12 +70,12 @@ exports.paginate = function(req, res) {
   console.log(genre);
   if (moviesOrTv === 'TV Shows') {
     if (genre.length > 0) {
-      genreQuery = " AND netflix_genres @> ARRAY['" + genre + "']::varchar[]";
+      genreQuery = " AND netflix_genres @> ARRAY['" + genreAliases[genre] + "']::varchar[]";
     }
     netflix_genres = " AND netflix_genres @> ARRAY['TV Shows']::varchar[]" + genreQuery;
   } else if (moviesOrTv === 'Movies') {
     if (genre.length > 0) {
-      genreQuery = " AND netflix_genres @> ARRAY['" + genre + "']::varchar[]";
+      genreQuery = " AND netflix_genres @> ARRAY['" + genreAliases[genre] + "']::varchar[]";
     }
     netflix_genres = " AND NOT netflix_genres @> ARRAY['TV Shows']::varchar[]" + genreQuery;
   } else {
