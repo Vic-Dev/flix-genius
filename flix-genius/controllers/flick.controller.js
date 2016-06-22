@@ -44,7 +44,7 @@ exports.paginate = function(req, res) {
     'Documentaries': 'Documentaries', 
     'Dramas': 'Dramas', 
     'Faith and Spirituality': 'Faith & Spirituality', 
-    'Gay and Lesbian': 'Gay & Lesbian', 
+    'Gay and Lesbian': 'Gay & Lesbian Movies', 
     'Horror': 'Horror Movies', 
     'Independent': 'Independent Movies', 
     'International': 'International Movies', 
