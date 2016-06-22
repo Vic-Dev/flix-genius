@@ -38,7 +38,7 @@ exports.paginate = function(req, res) {
     'Action and Adventure': 'Action & Adventure', 
     'Anime': 'Anime', 
     'Canadian': 'Canadian Movies', 
-    'Children and Family': 'Children & Family', 
+    'Children and Family': 'Children & Family Movies', 
     'Classic': 'Classic Movies', 
     'Comedies': 'Comedies', 
     'Documentaries': 'Documentaries', 
@@ -69,19 +69,16 @@ exports.paginate = function(req, res) {
   }
   console.log(genre);
   if (moviesOrTv === 'TV Shows') {
-    if (genre.length > 0) {
-      genreQuery = " AND netflix_genres @> ARRAY['" + genreAliases[genre] + "']::varchar[]";
-    }
     netflix_genres = " AND netflix_genres @> ARRAY['TV Shows']::varchar[]" + genreQuery;
   } else if (moviesOrTv === 'Movies') {
-    if (genre.length > 0) {
-      genreQuery = " AND netflix_genres @> ARRAY['" + genreAliases[genre] + "']::varchar[]";
-    }
     netflix_genres = " AND NOT netflix_genres @> ARRAY['TV Shows']::varchar[]" + genreQuery;
   } else {
     netflix_genres = '';
   }
-  var where = ["active = ?" + netflix_genres, true]
+  if (genre.length > 0) {
+    genreQuery = " AND netflix_genres @> ARRAY['" + genreAliases[genre] + "']::varchar[]";
+  }
+  var where = ["active = ?" + netflix_genres + genreQuery, true]
   models.flick.findAll({ where: where, offset: start, limit: limit, order: sort + ' ' + order + ' NULLS LAST'})
   .then(function(flickInstance) {
     res.json(flickInstance);
