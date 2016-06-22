@@ -1,6 +1,7 @@
 'use strict';
 
 var models = require('../models');
+var request = require('request');
 
 // Gets a list of Flicks
 exports.index = function(req, res) {
@@ -85,19 +86,106 @@ exports.paginate = function(req, res) {
   });
 };
 
-// // Updates an existing Thing in the DB
-// exports.update = function(req, res) {
+// Updates an existing Thing in the DB
+exports.update = function(req, res) {
+  var flickId = req.params.id;
+  var imdbId = req.query.imdbId;
+  console.log('hit update page');
+  console.log(imdbId);
+  if (imdbId != undefined) {
+    console.log('hit this part');
+    models.flick.find({
+      where: {
+        netflix_id: flickId
+      }
+    })
+    .then(function(flickInstance) {
+      getIMDBInfo(flickInstance, imdbId);
+    });
+  } else {
+    console.log('hit second part');
+    res.send('Error: no imdb id');
+  }
+};
 
-//   if(req.body.id){
-//     delete req.body.id;
-//   }
-//   Thing.find({
-//     where: {
-//       id: req.params.id
-//     }
-//   })
-//     .then(handleEntityNotFound(res))
-//     .then(saveUpdates(req.body))
-//     .then(responseWithResult(res))
-//     .catch(handleError(res));
-// };
+var parseRuntime = function(data) {
+  var runtime = data;
+  var runtimeRegex = '(.+) min$';
+  runtime = runtime.match(runtimeRegex);
+  if (runtime) {
+    runtime = runtime[1];
+  }
+  return runtime;
+}
+
+var parseArray = function(data) {
+  var array = data.split(',');
+  if ( (array[0].length <= 0) || (checkIfNA(array[0])) ) {
+    array = null;
+  }
+  return array;
+}
+
+var checkIfNA = function(input) {
+  return input == 'N/A'
+}
+
+var parseString = function(data) {
+  var string = data;
+  if (checkIfNA(string)) {
+    string = null;
+  }
+  return string;
+}
+
+var parseVotes = function(votes) {
+  if (votes) {
+    return votes.replace(/,/g,'');
+  }
+  return votes
+}
+
+var updateFlick = function(flick, body) {
+  var current_runtime = parseRuntime(body.Runtime);
+  var current_genres = parseArray(body.Genre);
+  var current_directors = parseArray(body.Director);
+  var current_writers = parseArray(body.Writer);
+  var current_cast = parseArray(body.Actors);
+  var current_description = parseString(body.Plot);
+  var current_language = parseString(body.Language);
+  var current_countries = parseArray(body.Country);
+  var current_rating = parseString(body.imdbRating);
+  var current_votes = parseVotes(parseString(body.imdbVotes));
+  var current_id = parseString(body.imdbID);
+
+  flick.update({
+    imdb_age_restriction: current_runtime,
+    imdb_runtime: current_runtime,
+    imdb_genres: current_genres,
+    imdb_directors: current_directors,
+    imdb_writers: current_writers,
+    imdb_cast: current_cast,
+    imdb_description: current_description,
+    imdb_language: current_language,
+    imdb_countries: current_countries,
+    imdb_rating: current_rating,
+    imdb_votes: current_votes,
+    imdb_id: current_id
+  }).then(function() { console.log('\u0007' + flick.imdb_rating); })
+}
+
+var getIMDBInfo = function(flick, imdbId) {
+  var options = {
+    url: 'http://www.omdbapi.com/?i=' + imdbId + '&plot=full&r=json'
+  }
+  request(options, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      body = JSON.parse(body);
+      console.log(body);
+      console.log(body.Response);
+      if (body.Response != 'False') {
+        updateFlick(flick, body);
+      }
+    }
+  })
+}

@@ -16,6 +16,8 @@ router.get('/flicks/:id', flick_controller.show);
 
 router.get('/flicks', flick_controller.paginate);
 
+router.get('/flicks/:id/update', flick_controller.update);
+
 router.get('/about', function(req,res,next) {
   // var test = testing();
   res.send('hi');
