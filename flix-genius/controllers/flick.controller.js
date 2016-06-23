@@ -171,7 +171,7 @@ var updateFlick = function(res, flick, body) {
     imdb_rating: current_rating,
     imdb_votes: current_votes,
     imdb_id: current_id
-  }).then(function() { console.log('\u0007' + flick.imdb_rating); res.json(body.imdbRating) })
+  }).then(function() { console.log('\u0007' + flick.imdb_rating); res.json({rating: current_rating, votes: current_votes}) })
 }
 
 var getIMDBInfo = function(res, flick, imdbId) {
