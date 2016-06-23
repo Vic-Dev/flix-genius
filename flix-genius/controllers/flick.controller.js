@@ -100,7 +100,7 @@ exports.update = function(req, res) {
       }
     })
     .then(function(flickInstance) {
-      getIMDBInfo(flickInstance, imdbId);
+      getIMDBInfo(res, flickInstance, imdbId);
     });
   } else {
     console.log('hit second part');
@@ -145,7 +145,7 @@ var parseVotes = function(votes) {
   return votes
 }
 
-var updateFlick = function(flick, body) {
+var updateFlick = function(res, flick, body) {
   var current_runtime = parseRuntime(body.Runtime);
   var current_genres = parseArray(body.Genre);
   var current_directors = parseArray(body.Director);
@@ -171,10 +171,10 @@ var updateFlick = function(flick, body) {
     imdb_rating: current_rating,
     imdb_votes: current_votes,
     imdb_id: current_id
-  }).then(function() { console.log('\u0007' + flick.imdb_rating); })
+  }).then(function() { console.log('\u0007' + flick.imdb_rating); res.json(body.imdbRating) })
 }
 
-var getIMDBInfo = function(flick, imdbId) {
+var getIMDBInfo = function(res, flick, imdbId) {
   var options = {
     url: 'http://www.omdbapi.com/?i=' + imdbId + '&plot=full&r=json'
   }
@@ -184,7 +184,7 @@ var getIMDBInfo = function(flick, imdbId) {
       console.log(body);
       console.log(body.Response);
       if (body.Response != 'False') {
-        updateFlick(flick, body);
+        updateFlick(res, flick, body);
       }
     }
   })
